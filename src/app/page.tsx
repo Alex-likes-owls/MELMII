@@ -1,65 +1,82 @@
+"use client";
 import Image from "next/image";
+import { useRef, useState } from "react";
+import LiveDetection from "./components/LiveDetect";
+import { Bayon } from "next/font/google";
+
+const bayon = Bayon({
+  weight: "400",
+  subsets: ["latin"],
+});
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="workpls flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans">
+      <header className="bg-sky-500 w-full relative flex h-15 items-center justify-between px-5 nowwork">
+        <div className="flex">
+          <Image src="Union.svg" alt="Melmii Logo" width={50} height={50} />
+          <Image
+            src="MELMII.svg"
+            alt="Logo"
+            width={70}
+            height={70}
+            className="ml-4"
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="text-sky-800 text-[15px] bg-white p-2 rounded-lg font-bold">
+          <a href="#about">Бидний Тухай</a>
+        </div>
+      </header>
+      <section className="bg-[#A1A1AA] w-full overflow-hidden">
+        <LiveDetection />
+      </section>
+      <main
+        className="w-full bg-[url(eyes.svg)] bg-size-[70px] flex flex-wrap justify-around py-20 pleasee"
+        id="about"
+      >
+        <div className="flex flex-col justify-center">
+          <Image src="/hero.png" alt="mascot" width={700} height={700} />
+        </div>
+        <div className="flex flex-col justify-center max-w-150">
+          <h1 className={`text-[60px] text-white font-bold`}>
+            МЭЛМИЙД ТАВТАЙ МОРИЛ
+          </h1>
+          <div className="text-xl text-white">
+            Харааны бэрхшээлтэй хүмүүст зориулан бүтээгдсэн аливаа эд зүйлсийг
+            мэдрэн таньж Монгол хэлээр хэлдэг вэб апп.
+          </div>
         </div>
       </main>
+      <footer className="w-full p-10 bg-size-[70px] flex justify-center align-center">
+        <div className="font-bold text-zinc-400">©Oculus Reparo</div>
+      </footer>
     </div>
   );
 }
+// export default async function MyNextFastAPIApp() {
+//   const role = await fetchEngineerRole();
+
+//   return (
+//     <>
+//       <div>{`The main skill of a ${role.title} is ${role.mainskill}.`}</div>
+//     </>
+//   );
+// }
+
+// async function fetchEngineerRole() {
+//   let baseUrl = "http://localhost:3000";
+//   const title = "Frontend Developer";
+//   try {
+//     const response = await fetch(
+//       `${baseUrl}/api/py/engineer-roles?title=${title}`,
+//     );
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch data");
+//     }
+//     const role = await response.json();
+//     return role;
+//   } catch (error) {
+//     console.error("Error fetching engineer role:", error);
+//     return null;
+//   }
+// }
