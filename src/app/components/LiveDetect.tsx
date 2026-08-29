@@ -23,8 +23,8 @@ export default function LiveDetect() {
           videoRef.current.srcObject = stream;
         }
       });
-    const interval = setInterval(() => {
-      sigmer();
+    const interval = setInterval(async () => {
+      await sigmer();
     }, 500);
     return () => clearInterval(interval);
   }, []);
@@ -128,7 +128,7 @@ export default function LiveDetect() {
         }
         isPlaying.current = false;
       },
-      "image/jpeg",
+      "image/png",
       0.9,
     );
   };
