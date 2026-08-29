@@ -14,7 +14,7 @@ from num2words import num2words
 import wave
 import onnxruntime as ort
 # from googletrans import Translator
-from deep_translator import GoogleTranslator
+# from deep_translator import GoogleTranslator
 import tempfile
 import uuid
 from starlette.background import BackgroundTask
