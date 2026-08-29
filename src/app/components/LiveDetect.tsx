@@ -43,6 +43,10 @@ export default function LiveDetect() {
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const context = canvas.getContext("2d");
+    if (!context) {
+      return;
+    }
+    console.log("Passed !context check...");
     context?.drawImage(video, 0, 0, canvas.width, canvas.height); ///img, x, y, w, h
     canvas.toBlob(
       async (blob) => {
@@ -128,7 +132,7 @@ export default function LiveDetect() {
         }
         isPlaying.current = false;
       },
-      "image/png",
+      "image/jpeg",
       0.9,
     );
   };
