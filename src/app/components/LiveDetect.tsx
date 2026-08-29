@@ -50,10 +50,11 @@ export default function LiveDetect() {
       return;
     }
     console.log("Passed !context check...");
-    context?.drawImage(video, 0, 0, canvas.width, canvas.height); ///img, x, y, w, h
+    context.drawImage(video, 0, 0, canvas.width, canvas.height); ///img, x, y, w, h
     canvas.toBlob(
       async (blob) => {
         if (!blob) {
+          isPlaying.current = false;
           return;
         }
         console.log("Passed !blob check...");
