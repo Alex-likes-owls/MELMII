@@ -98,7 +98,9 @@ export default function LiveDetect() {
           labelsRef.current.length = 0;
           // }
           if (summary && summary !== lastSummary.current) {
-            const re = await fetch(`${baseUrl}/voice?words=${summary}`);
+            const re = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/voice?words=${summary}`,
+            );
             if (!re.ok) {
               const err = await re.text();
               // console.log(err);
