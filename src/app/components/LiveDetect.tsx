@@ -48,13 +48,16 @@ export default function LiveDetect() {
         const formData = new FormData();
         formData.append("file", blob, "frammers.jpg"); //name blobvalue filename
 
-        const responst = await fetch(`${baseUrl}/detect`, {
-          method: "POST",
-          // headers: {
-          //   "Content-Type": "multipart/form-data",
-          // },
-          body: formData,
-        });
+        const responst = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/detect`,
+          {
+            method: "POST",
+            // headers: {
+            //   "Content-Type": "multipart/form-data",
+            // },
+            body: formData,
+          },
+        );
         if (responst.ok) {
           const res = await responst.json();
           let dets: {
