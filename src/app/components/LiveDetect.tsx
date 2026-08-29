@@ -30,13 +30,16 @@ export default function LiveDetect() {
   }, []);
 
   const sigmer = async () => {
+    console.log("Calling sigmer...");
     if (isPlaying.current) return;
+    console.log("Passed isPlaying.current check...");
     isPlaying.current = true;
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) {
       return;
     }
+    console.log("Passed !video || !canvas check...");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const context = canvas.getContext("2d");
@@ -46,6 +49,7 @@ export default function LiveDetect() {
         if (!blob) {
           return;
         }
+        console.log("Passed !blob check...");
         const formData = new FormData();
         formData.append("file", blob, "frammers.jpg"); //name blobvalue filename
 
