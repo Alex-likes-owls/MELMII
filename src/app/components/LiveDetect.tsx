@@ -90,14 +90,14 @@ export default function LiveDetect() {
           const summary = Object.entries(counts)
             .map(([name, count]) => `${count} ${name}`)
             .join(" ");
-          console.log(summary);
+          // console.log(summary);
           labelsRef.current.length = 0;
           // }
           if (summary && summary !== lastSummary.current) {
             const re = await fetch(`${baseUrl}/voice?words=${summary}`);
             if (!re.ok) {
               const err = await re.text();
-              console.log(err);
+              // console.log(err);
               isPlaying.current = false;
               return;
             }
