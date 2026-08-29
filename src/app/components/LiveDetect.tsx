@@ -40,6 +40,9 @@ export default function LiveDetect() {
       return;
     }
     console.log("Passed !video || !canvas check...");
+    console.log(
+      `Video width: ${video.videoWidth}. Video height: ${video.videoHeight}`,
+    );
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     const context = canvas.getContext("2d");
