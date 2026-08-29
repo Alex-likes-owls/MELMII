@@ -31,6 +31,7 @@ export default function LiveDetect() {
 
   const sigmer = async () => {
     if (isPlaying.current) return;
+    isPlaying.current = true;
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) {
@@ -98,6 +99,7 @@ export default function LiveDetect() {
           labelsRef.current.length = 0;
           // }
           if (summary && summary !== lastSummary.current) {
+            lastSummary.current = summary;
             const re = await fetch(
               `${process.env.NEXT_PUBLIC_API_URL}/voice?words=${summary}`,
             );
@@ -107,7 +109,6 @@ export default function LiveDetect() {
               isPlaying.current = false;
               return;
             }
-            isPlaying.current = true;
             const blob = await re.blob();
             const audioURL = URL.createObjectURL(blob);
             const audio = new Audio(audioURL);
@@ -116,11 +117,12 @@ export default function LiveDetect() {
               isPlaying.current = false;
             });
             audio.play();
-            lastSummary.current = summary;
+            return;
           }
         } else {
           console.log("failure");
         }
+        isPlaying.current = false;
       },
       "image/jpeg",
       0.9,
