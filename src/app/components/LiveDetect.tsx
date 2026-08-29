@@ -71,7 +71,7 @@ export default function LiveDetect() {
           dets.forEach((det) => {
             // if (det.confidence >= 0.6 && newContext) {
             if (det.confidence >= 0.6 && labelsRef.current) {
-              // console.log(det.class, det.confidence, det.bbox);
+              console.log(det.class, det.confidence, det.bbox);
               labelsRef.current.push(det.class);
               //     const [x1, y1, x2, y2] = element.bbox;
               //     const w = x2 - x1;
@@ -95,7 +95,7 @@ export default function LiveDetect() {
           const summary = Object.entries(counts)
             .map(([name, count]) => `${count} ${name}`)
             .join(" ");
-          // console.log(summary);
+          console.log(summary);
           labelsRef.current.length = 0;
           // }
           if (summary && summary !== lastSummary.current) {
@@ -105,7 +105,7 @@ export default function LiveDetect() {
             );
             if (!re.ok) {
               const err = await re.text();
-              // console.log(err);
+              console.log(err);
               isPlaying.current = false;
               return;
             }
