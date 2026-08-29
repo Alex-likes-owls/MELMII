@@ -12,7 +12,7 @@ export default function LiveDetect() {
 
   const labelsRef = useRef<string[]>([]);
   const lastSummary = useRef<string>("");
-  const isPlaying = useRef(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({
@@ -23,12 +23,12 @@ export default function LiveDetect() {
           videoRef.current.srcObject = stream;
         }
       });
-    const interval = setInterval(() => {
+    const interval = setInterval(async () => {
       try {
-        sigmer();
+        await sigmer();
       } catch (e) {
         console.log(e);
-        isPlaying.current = false;
+        setIsPlaying(false);
       }
     }, 500);
     return () => clearInterval(interval);
@@ -36,9 +36,9 @@ export default function LiveDetect() {
 
   const sigmer = async () => {
     console.log("Calling sigmer...");
-    if (isPlaying.current) return;
+    if (isPlaying) return;
     console.log("Passed isPlaying.current check...");
-    isPlaying.current = true;
+    setIsPlaying(true);
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) {
@@ -59,7 +59,7 @@ export default function LiveDetect() {
     canvas.toBlob(
       async (blob) => {
         if (!blob) {
-          isPlaying.current = false;
+          setIsPlaying(false);
           return;
         }
         console.log("Passed !blob check...");
@@ -123,7 +123,7 @@ export default function LiveDetect() {
             if (!re.ok) {
               const err = await re.text();
               console.log(err);
-              isPlaying.current = false;
+              setIsPlaying(false);
               return;
             }
             const blob = await re.blob();
@@ -131,7 +131,7 @@ export default function LiveDetect() {
             const audio = new Audio(audioURL);
             audio.addEventListener("ended", () => {
               URL.revokeObjectURL(audioURL);
-              isPlaying.current = false;
+              setIsPlaying(false);
             });
             audio.play();
             return;
@@ -139,7 +139,7 @@ export default function LiveDetect() {
         } else {
           console.log("failure");
         }
-        isPlaying.current = false;
+        setIsPlaying(false);
       },
       "image/jpeg",
       0.9,
