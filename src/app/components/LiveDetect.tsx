@@ -24,7 +24,12 @@ export default function LiveDetect() {
         }
       });
     const interval = setInterval(() => {
-      sigmer();
+      try {
+        sigmer();
+      } catch (e) {
+        console.log(e);
+        isPlaying.current = false;
+      }
     }, 500);
     return () => clearInterval(interval);
   }, []);
