@@ -4,9 +4,10 @@ import { use, useEffect, useRef, useState } from "react";
 export default function LiveDetect() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  let baseUrl = "https://melmii2.vercel.app";
+  let baseUrl: string | undefined;
+  baseUrl = "https://melmii2.vercel.app";
   if (process.env.NODE_ENV === "development") {
-    baseUrl = "http://localhost:8000";
+    baseUrl = process.env.NEXT_PUBLIC_API_URL;
   }
 
   const labelsRef = useRef<string[]>([]);
