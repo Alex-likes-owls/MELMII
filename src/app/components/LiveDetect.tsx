@@ -13,7 +13,24 @@ export default function LiveDetect() {
   const labelsRef = useRef<string[]>([]);
   const lastSummary = useRef<string>("");
   const [isPlaying, setIsPlaying] = useState(false);
+  const [audioLocked, setAudioLocked] = useState(false);
+  const unlockedAudio = useRef<HTMLAudioElement | null>(null);
+
+  const unlockAudio = () => {
+    const audio = new Audio();
+    audio
+      .play()
+      .then(() => {
+        unlockedAudio.current = audio;
+        setAudioLocked(true);
+      })
+      .catch((err) => {
+        console.log("error:", err);
+      });
+  };
+
   useEffect(() => {
+    if (!audioLocked) return;
     navigator.mediaDevices
       .getUserMedia({
         video: { facingMode: "environment" },
@@ -32,7 +49,7 @@ export default function LiveDetect() {
       }
     }, 500);
     return () => clearInterval(interval);
-  }, []);
+  }, [audioLocked]);
 
   const sigmer = async () => {
     console.log("Calling sigmer...");
@@ -145,6 +162,18 @@ export default function LiveDetect() {
       0.9,
     );
   };
+  if (!audioLocked) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <button
+          onClick={unlockAudio}
+          className="text-sky-800 text-[15px] bg-white p-3 cursor-pointer rounded-lg font-bold"
+        >
+          Эхлэх
+        </button>
+      </div>
+    );
+  }
 
   return (
     // <div className="relative">
