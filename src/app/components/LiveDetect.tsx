@@ -12,12 +12,12 @@ export default function LiveDetect() {
 
   const labelsRef = useRef<string[]>([]);
   const lastSummary = useRef<string>("");
-  const [isPlaying, setIsPlaying] = useState(false);
+  const isPlaying = useRef<boolean>(false);
   const [audioLocked, setAudioLocked] = useState(false);
   const unlockedAudio = useRef<HTMLAudioElement | null>(null);
 
   const unlockAudio = () => {
-    const audio = new Audio();
+    const audio = new Audio("outpuh.wav");
     audio
       .play()
       .then(() => {
@@ -45,7 +45,7 @@ export default function LiveDetect() {
         await sigmer();
       } catch (e) {
         console.log(e);
-        setIsPlaying(false);
+        isPlaying.current = false;
       }
     }, 500);
     return () => clearInterval(interval);
@@ -53,12 +53,13 @@ export default function LiveDetect() {
 
   const sigmer = async () => {
     console.log("Calling sigmer...");
-    if (isPlaying) return;
+    if (isPlaying.current) return;
     console.log("Passed isPlaying.current check...");
-    setIsPlaying(true);
+    isPlaying.current = true;
     const video = videoRef.current;
     const canvas = canvasRef.current;
     if (!video || !canvas) {
+      isPlaying.current = false;
       return;
     }
     console.log("Passed !video || !canvas check...");
@@ -76,7 +77,7 @@ export default function LiveDetect() {
     canvas.toBlob(
       async (blob) => {
         if (!blob) {
-          setIsPlaying(false);
+          isPlaying.current = false;
           return;
         }
         console.log("Passed !blob check...");
@@ -140,7 +141,7 @@ export default function LiveDetect() {
             if (!re.ok) {
               const err = await re.text();
               console.log(err);
-              setIsPlaying(false);
+              isPlaying.current = false;
               return;
             }
             const blob = await re.blob();
@@ -148,7 +149,7 @@ export default function LiveDetect() {
             const audio = new Audio(audioURL);
             audio.addEventListener("ended", () => {
               URL.revokeObjectURL(audioURL);
-              setIsPlaying(false);
+              isPlaying.current = false;
             });
             audio.play();
             return;
@@ -156,7 +157,7 @@ export default function LiveDetect() {
         } else {
           console.log("failure");
         }
-        setIsPlaying(false);
+        isPlaying.current = false;
       },
       "image/jpeg",
       0.9,
