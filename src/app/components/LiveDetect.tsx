@@ -1,6 +1,7 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
+import { blob } from "stream/consumers";
 export default function LiveDetect() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -14,14 +15,17 @@ export default function LiveDetect() {
   const lastSummary = useRef<string>("");
   const isPlaying = useRef<boolean>(false);
   const [audioLocked, setAudioLocked] = useState(false);
-  const unlockedAudio = useRef<HTMLAudioElement | null>(null);
+  // const unlockedAudio = useRef<HTMLAudioElement | null>(null);
+  const audioElRef = useRef<HTMLAudioElement | null>(null);
+  const currentObjectURL = useRef<string | null>(null);
 
   const unlockAudio = () => {
     const audio = new Audio("outpuh.wav");
     audio
       .play()
       .then(() => {
-        unlockedAudio.current = audio;
+        audio.pause();
+        audioElRef.current = audio;
         setAudioLocked(true);
       })
       .catch((err) => {
@@ -50,6 +54,30 @@ export default function LiveDetect() {
     }, 500);
     return () => clearInterval(interval);
   }, [audioLocked]);
+
+  const playAudioBlob = (blob: Blob) => {
+    const audioEl = audioElRef.current;
+    if (!audioEl) {
+      isPlaying.current = false;
+      return;
+    }
+    if (currentObjectURL.current) {
+      URL.revokeObjectURL(currentObjectURL.current);
+    }
+    const audioURL = URL.createObjectURL(blob);
+    currentObjectURL.current = audioURL;
+    audioEl.src = audioURL;
+    audioEl.onended = () => {
+      isPlaying.current = false;
+    };
+    audioEl.onerror = () => {
+      isPlaying.current = false;
+    };
+    audioEl.play().catch((err) => {
+      console.log("play() error:", err);
+      isPlaying.current = false;
+    });
+  };
 
   const sigmer = async () => {
     console.log("Calling sigmer...");
@@ -139,19 +167,11 @@ export default function LiveDetect() {
               `${process.env.NEXT_PUBLIC_API_URL}/voice?words=${summary}`,
             );
             if (!re.ok) {
-              const err = await re.text();
-              console.log(err);
               isPlaying.current = false;
               return;
             }
-            const blob = await re.blob();
-            const audioURL = URL.createObjectURL(blob);
-            const audio = new Audio(audioURL);
-            audio.addEventListener("ended", () => {
-              URL.revokeObjectURL(audioURL);
-              isPlaying.current = false;
-            });
-            audio.play();
+            const audioBlob = await re.blob();
+            playAudioBlob(audioBlob);
             return;
           }
         } else {
